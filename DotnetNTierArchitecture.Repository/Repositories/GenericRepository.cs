@@ -30,9 +30,9 @@ namespace DotnetNTierArchitecture.Repository.Repositories
            await _dbSet.AddRangeAsync(entities);
         }
 
-        public IQueryable<T> GetAll(Expression<Func<T, bool>> expression)
+        public IQueryable<T> GetAll()
         {
-            return _dbSet.AsNoTracking().Where(expression).AsQueryable(); //AsNoTracking: Performans açısından avantaj sağlar.Çekilen veriler sadece okunur, önbelleğe alınmaz. 
+            return _dbSet.AsNoTracking().AsQueryable(); //AsNoTracking: Performans açısından avantaj sağlar.Çekilen veriler sadece okunur, önbelleğe alınmaz. 
         }
 
         public async Task<T> GetByIdAsync(int id)
