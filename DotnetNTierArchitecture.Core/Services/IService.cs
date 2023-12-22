@@ -15,7 +15,7 @@ namespace DotnetNTierArchitecture.Core.Services
         Task<T> AddAsync(T entity);
         Task<IEnumerable<T>> AddRangeAsync(IEnumerable<T> entities);
         Task UpdateAsync(T entity);
-        Task RemoveAsync(T entity);
+        Task Remove(T entity);
         Task RemoveRangeAsync(IEnumerable<T> entities);
     }
 }

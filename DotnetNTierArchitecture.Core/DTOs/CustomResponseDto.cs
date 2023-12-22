@@ -21,7 +21,7 @@ namespace DotnetNTierArchitecture.Core.DTOs
             return new CustomResponseDto<T> { Data = data, StatusCode = statusCode };
         }
 
-        public static CustomResponseDto<T> Success(int statusCode)
+        public static CustomResponseDto<T> Success(int statusCode)  //Data göndermek istemezsek
         {
             return new CustomResponseDto<T> { StatusCode = statusCode };
         }

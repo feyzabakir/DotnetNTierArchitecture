@@ -1,4 +1,4 @@
-﻿using DotnetNTierArchitecture.Core.Repositories;
+﻿ using DotnetNTierArchitecture.Core.Repositories;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -17,7 +17,7 @@ namespace DotnetNTierArchitecture.Repository.Repositories
         public GenericRepository(AppDbContext context)
         {
             _context = context;
-            _dbSet = _context.Set<T>();
+            _dbSet = _context.Set<T>();  //DbSet'e _context üzerinde ulaşabildiğimiz için parametreyle göndermeye gerek yok
         }
 
         public async Task AddAsync(T entity)
