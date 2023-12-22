@@ -41,12 +41,12 @@ namespace DotnetNTierArchitecture.Service
             return await _repository.GetAll().ToListAsync();
         }
 
-        public async Task<T> GetByIdAsync(int id)
+        public async Task<T> GetById(int id)
         {
            return await _repository.GetByIdAsync(id); 
         }
 
-        public async Task Remove(T entity)
+        public async Task RemoveAsync(T entity)
         {
            _repository.Remove(entity);
             await _unitOfWork.CommitAsync();
