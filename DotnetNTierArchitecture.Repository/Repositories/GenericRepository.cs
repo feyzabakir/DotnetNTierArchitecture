@@ -17,22 +17,21 @@ namespace DotnetNTierArchitecture.Repository.Repositories
         public GenericRepository(AppDbContext context)
         {
             _context = context;
-            _dbSet = _context.Set<T>();  //DbSet'e _context üzerinde ulaşabildiğimiz için parametreyle göndermeye gerek yok
+            _dbSet = _context.Set<T>();
         }
-
         public async Task AddAsync(T entity)
         {
-          await _dbSet.AddAsync(entity);
+            await _dbSet.AddAsync(entity);
         }
 
         public async Task AddRangeAsync(IEnumerable<T> entities)
         {
-           await _dbSet.AddRangeAsync(entities);
+            await _dbSet.AddRangeAsync(entities);
         }
 
         public IQueryable<T> GetAll()
         {
-            return _dbSet.AsNoTracking().AsQueryable(); //AsNoTracking: Performans açısından avantaj sağlar.Çekilen veriler sadece okunur, önbelleğe alınmaz. 
+            return _dbSet.AsNoTracking().AsQueryable();
         }
 
         public async Task<T> GetByIdAsync(int id)
@@ -42,18 +41,17 @@ namespace DotnetNTierArchitecture.Repository.Repositories
 
         public void Remove(T entity)
         {
-            //_context.Entry(entity).State = EntityState.Deleted; 
+            //_context.Entry(entity).State = EntityState.Deleted;
             _dbSet.Remove(entity);
         }
 
         public void RemoveRange(IEnumerable<T> entities)
         {
-          _dbSet.RemoveRange(entities);
+            _dbSet.RemoveRange(entities);
         }
 
         public void Update(T entity)
         {
-            //_context.Entry(entity).State = EntityState.Modified;
             _dbSet.Update(entity);
         }
 

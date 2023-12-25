@@ -15,7 +15,6 @@ namespace DotnetNTierArchitecture.Repository.UnitOfWork
         {
             _context = context;
         }
-
         public void Commit()
         {
             _context.SaveChanges();

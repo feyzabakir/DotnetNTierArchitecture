@@ -7,7 +7,6 @@ using Microsoft.EntityFrameworkCore;
 using System.Reflection;
 using DotnetNTierArchitecture.Service.Mapping;
 using DotnetNTierArchitecture.Core.Services;
-using DotnetNTierArchitecture.Service;
 using FluentValidation.AspNetCore;
 using DotnetNTierArchitecture.Service.Validations;
 using DotnetNTierArchitecture.Service.Services;

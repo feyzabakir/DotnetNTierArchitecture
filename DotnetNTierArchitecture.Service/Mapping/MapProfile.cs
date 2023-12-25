@@ -14,12 +14,14 @@ namespace DotnetNTierArchitecture.Service.Mapping
         public MapProfile() 
         {
             // entity'den dto çevirme
-            CreateMap<Team,TeamDto>().ReverseMap(); 
-            CreateMap<User,UserDto>().ReverseMap(); 
-            CreateMap<UserProfile,UserProfileDto>().ReverseMap(); 
+            CreateMap<Team, TeamDto>().ReverseMap();
+            CreateMap<User, UserDto>().ReverseMap();
+            CreateMap<UserProfile, UserProfileDto>().ReverseMap();
 
             //dto'dan entity'e çevirme
             CreateMap<TeamDto, Team>();
+            CreateMap<UserDto, User>();
+            CreateMap<UserProfileDto, UserProfile>();
         }
     }
 }

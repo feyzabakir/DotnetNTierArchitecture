@@ -41,6 +41,7 @@ namespace DotnetNTierArchitecture.API.Controllers
             var teamDtos = _mapper.Map<TeamDto>(team);
             return CreateActionResult(GlobalResultDto<TeamDto>.Success(201, teamDtos));
         }
+
         [HttpPut]
         public async Task<IActionResult> Update(TeamDto teamDto)
         {

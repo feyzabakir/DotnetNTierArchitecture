@@ -9,7 +9,7 @@ using System.Linq.Expressions;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace DotnetNTierArchitecture.Service
+namespace DotnetNTierArchitecture.Service.Services
 {
     public class Service<T> : IService<T> where T : class
     {
@@ -21,11 +21,10 @@ namespace DotnetNTierArchitecture.Service
             _repository = repository;
             _unitOfWork = unitOfWork;
         }
-
         public async Task<T> AddAsync(T entity)
         {
-           await _repository.AddAsync(entity);
-           await _unitOfWork.CommitAsync();
+            await _repository.AddAsync(entity);
+            await _unitOfWork.CommitAsync();
             return entity;
         }
 
@@ -43,12 +42,12 @@ namespace DotnetNTierArchitecture.Service
 
         public async Task<T> GetById(int id)
         {
-           return await _repository.GetByIdAsync(id); 
+            return await _repository.GetByIdAsync(id);
         }
 
         public async Task RemoveAsync(T entity)
         {
-           _repository.Remove(entity);
+            _repository.Remove(entity);
             await _unitOfWork.CommitAsync();
         }
 
@@ -59,7 +58,7 @@ namespace DotnetNTierArchitecture.Service
         }
 
         public async Task UpdateAsync(T entity)
-        {         
+        {
             _repository.Update(entity);
             await _unitOfWork.CommitAsync();
         }
