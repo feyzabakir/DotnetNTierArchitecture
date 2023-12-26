@@ -1,4 +1,5 @@
-﻿using DotnetNTierArchitecture.Core.Models;
+﻿using DotnetNTierArchitecture.Core.DTOs;
+using DotnetNTierArchitecture.Core.Models;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -9,5 +10,7 @@ namespace DotnetNTierArchitecture.Core.Services
 {
     public interface IUserService:IService<User>
     {
+        string GeneratePasswordHash(string userName, string password);
+        UserDto FindUser(string userName, string password);
     }
 }

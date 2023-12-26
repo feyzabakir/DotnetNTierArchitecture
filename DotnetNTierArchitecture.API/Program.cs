@@ -24,6 +24,7 @@ builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepositor
 builder.Services.AddScoped(typeof(IService<>),typeof(Service<>));
 builder.Services.AddAutoMapper(typeof(MapProfile));
 builder.Services.AddScoped<ITeamService, TeamService>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 builder.Services.AddControllers()
     .AddFluentValidation(x =>
@@ -32,6 +33,9 @@ builder.Services.AddControllers()
         x.RegisterValidatorsFromAssemblyContaining<UserDtoValidator>();
         x.RegisterValidatorsFromAssemblyContaining<UserProfileDtoValidator>();
     });
+
+// JWT Kütüphanesi
+builder.Services.AddControllers().AddFluentValidation(x => { x.RegisterValidatorsFromAssemblyContaining<TeamDtoValidator>(); });
 
 //AppDbContext iþlemleri
 builder.Services.AddDbContext<AppDbContext>(x =>
