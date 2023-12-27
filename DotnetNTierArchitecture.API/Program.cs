@@ -1,4 +1,4 @@
-using DotnetNTierArchitecture.Core.Repositories;
+﻿using DotnetNTierArchitecture.Core.Repositories;
 using DotnetNTierArchitecture.Core.UnitOfWorks;
 using DotnetNTierArchitecture.Repository.Repositories;
 using DotnetNTierArchitecture.Repository.UnitOfWork;
@@ -10,6 +10,13 @@ using DotnetNTierArchitecture.Core.Services;
 using FluentValidation.AspNetCore;
 using DotnetNTierArchitecture.Service.Validations;
 using DotnetNTierArchitecture.Service.Services;
+using Autofac.Extensions.DependencyInjection;
+using Autofac;
+using DotnetNTierArchitecture.API.Modules;
+using DotnetNTierArchitecture.API.MiddleWares;
+using Microsoft.OpenApi.Models;
+using DotnetNTierArchitecture.Service.Authorization.Abstraction;
+using DotnetNTierArchitecture.Service.Authorization.Concrete;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -18,26 +25,45 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddControllers();
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
-builder.Services.AddScoped(typeof(IGenericRepository<>), typeof(GenericRepository<>));
-builder.Services.AddScoped(typeof(IService<>),typeof(Service<>));
-builder.Services.AddAutoMapper(typeof(MapProfile));
-builder.Services.AddScoped<ITeamService, TeamService>();
-builder.Services.AddScoped<IUserService, UserService>();
 
-builder.Services.AddControllers()
-    .AddFluentValidation(x =>
+#region swagger islemleri
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
     {
-        x.RegisterValidatorsFromAssemblyContaining<TeamDtoValidator>();
-        x.RegisterValidatorsFromAssemblyContaining<UserDtoValidator>();
-        x.RegisterValidatorsFromAssemblyContaining<UserProfileDtoValidator>();
+        Scheme = "Bearer",
+        BearerFormat = "JWT",
+        In = ParameterLocation.Header,
+        Name = "Authorization",
+        Description = "Bearer Authentication with JWT Token",
+        Type = SecuritySchemeType.Http
     });
+    options.AddSecurityRequirement(new OpenApiSecurityRequirement
+    {
+        {
+            new OpenApiSecurityScheme
+            {
+                Reference = new OpenApiReference
+                {
+                    Id = "Bearer",
+                    Type = ReferenceType.SecurityScheme
+                }
+            },
+            new List<string>()
+        }
+    });
+});
 
-// JWT K�t�phanesi
+#endregion
+
+builder.Services.AddAutoMapper(typeof(MapProfile));
+builder.Services.AddHttpContextAccessor();
+builder.Services.AddScoped<IJwtAuthenticationManager, JwtAuthenticationManager>();
+
+// JWT Kutuphanesi
 builder.Services.AddControllers().AddFluentValidation(x => { x.RegisterValidatorsFromAssemblyContaining<TeamDtoValidator>(); });
 
-//AppDbContext i�lemleri
+//AppDbContext islemleri
 builder.Services.AddDbContext<AppDbContext>(x =>
 {
     x.UseSqlServer(builder.Configuration.GetConnectionString("SqlConnection"), option =>
@@ -46,6 +72,10 @@ builder.Services.AddDbContext<AppDbContext>(x =>
     });
 });
 
+builder.Host.UseServiceProviderFactory(new AutofacServiceProviderFactory());
+
+//Buradan Autofac kullanarak yazdığımız RepoServiceModule'ü dahil ediyoruz.
+builder.Host.ConfigureContainer<ContainerBuilder>(containerBuilder => containerBuilder.RegisterModule(new RepoModuleService()));
 
 var app = builder.Build();
 
@@ -57,9 +87,14 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCustomException();
 
+app.UseRouting();
+
+app.UseAuthentication();
 app.UseAuthorization();
 
+app.UseMiddleware<JwtMiddleware>();
 app.MapControllers();
 
 app.Run();

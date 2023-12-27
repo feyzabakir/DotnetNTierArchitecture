@@ -1,10 +1,11 @@
 ﻿using AutoMapper;
+using DotnetNTierArchitecture.Core.DTOs.Authentication;
 using DotnetNTierArchitecture.Core.DTOs;
 using DotnetNTierArchitecture.Core.Models;
 using DotnetNTierArchitecture.Core.Repositories;
 using DotnetNTierArchitecture.Core.Services;
+using DotnetNTierArchitecture.Service.Authorization.Abstraction;
 using DotnetNTierArchitecture.Core.UnitOfWorks;
-using DotnetNTierArchitecture.Repository.Repositories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,19 +15,22 @@ using System.Threading.Tasks;
 
 namespace DotnetNTierArchitecture.Service.Services
 {
-    public class UserService : Service<User>, IUserService
+    public class UserService: Service<User>, IUserService
     {
         private readonly IMapper _mapper;
         private readonly IGenericRepository<User> _repository;
         private readonly IUserRepository _userRepository;
+        private readonly IJwtAuthenticationManager _jwtAuthenticationManager;
 
-        public UserService(IGenericRepository<User> repository, IUnitOfWork unitOfWork, IUserRepository userRepository, IMapper mapper) : base(repository, unitOfWork)
+        public UserService(IGenericRepository<User> repository, IUnitOfWork unitOfWork, IMapper mapper, IJwtAuthenticationManager jwtAuthenticationManager,
+            IUserRepository userRepository) : base(repository, unitOfWork)
         {
             _mapper = mapper;
             _repository = repository;
-          
+            _jwtAuthenticationManager = jwtAuthenticationManager;
             _userRepository = userRepository;
         }
+
         public string GeneratePasswordHash(string userName, string password)
         {
             if (string.IsNullOrEmpty(userName))
@@ -75,6 +79,32 @@ namespace DotnetNTierArchitecture.Service.Services
             var user = _repository.Where(x => x.UserName == userName && x.Password == passHashed).FirstOrDefault();
             var userDto = _mapper.Map<UserDto>(user);
             return userDto;
+        }
+
+        public AuthResponseDto Login(AuthRequestDto request)
+        {
+            AuthResponseDto responseDto = new AuthResponseDto();
+            UserDto user = FindUser(request.UserName, request.Password);
+            responseDto = _jwtAuthenticationManager.Authenticate(request.UserName, request.Password);
+            responseDto.User = user;
+
+            return responseDto;
+        }
+
+        public User SignUp(AuthRequestDto authDto)
+        {
+            #region Password'un hashli halini veri tabanına göndermek için güncelleme yap
+            var passwordHash = GeneratePasswordHash(authDto.UserName, authDto.Password);
+            #endregion
+
+            var user = AddAsync(new Core.Models.User
+            {
+                Email = authDto.Email,
+                Password = passwordHash,
+                UserName = authDto.UserName,
+                TeamId = 1
+            });
+            return user.Result;
         }
     }
 }

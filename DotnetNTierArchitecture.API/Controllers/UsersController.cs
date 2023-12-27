@@ -52,22 +52,22 @@ namespace DotnetNTierArchitecture.API.Controllers
             return CreateActionResult(GlobalResultDto<NoContentDto>.Success(204));
         }
 
-        //[HttpPost("Signup")]
-        //public async Task<IActionResult> SignUp(AuthRequestDto authDto)
-        //{
-        //    var user = _userService.SignUp(authDto);
-        //    var userDto = _mapper.Map<UserDto>(user);
-        //    return CreateActionResult(GlobalResultDto<UserDto>.Success(201, userDto));
-        //}
+        [HttpPost("Signup")]
+        public async Task<IActionResult> SignUp(AuthRequestDto authDto)
+        {
+            var user = _userService.SignUp(authDto);
+            var userDto = _mapper.Map<UserDto>(user);
+            return CreateActionResult(GlobalResultDto<UserDto>.Success(201, userDto));
+        }
 
-        //[HttpPost("Login")]
-        //public IActionResult Login(AuthRequestDto authDto)
-        //{
-        //    var result = _userService.Login(authDto);
-        //    if (result.User != null)
-        //        return CreateActionResult(GlobalResultDto<AuthResponseDto>.Success(200, result));
-        //    else
-        //        return CreateActionResult(GlobalResultDto<AuthResponseDto>.Success(401, result));
-        //}
+        [HttpPost("Login")]
+        public IActionResult Login(AuthRequestDto authDto)
+        {
+            var result = _userService.Login(authDto);
+            if (result.User != null)
+                return CreateActionResult(GlobalResultDto<AuthResponseDto>.Success(200, result));
+            else
+                return CreateActionResult(GlobalResultDto<AuthResponseDto>.Success(401, result));
+        }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using DotnetNTierArchitecture.Core.DTOs;
+using DotnetNTierArchitecture.Core.DTOs.Authentication;
 using DotnetNTierArchitecture.Core.Models;
 using System;
 using System.Collections.Generic;
@@ -12,5 +13,7 @@ namespace DotnetNTierArchitecture.Core.Services
     {
         string GeneratePasswordHash(string userName, string password);
         UserDto FindUser(string userName, string password);
+        AuthResponseDto Login(AuthRequestDto request);
+        User SignUp(AuthRequestDto authDto);
     }
 }
