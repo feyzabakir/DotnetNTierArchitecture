@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace DotnetNTierArchitecture.Core.DTOs
 {
-    public class BaseDto
+    public abstract class BaseDto
     {
         public int Id { get; set; }
         public DateTime CreatedDate { get; set; }

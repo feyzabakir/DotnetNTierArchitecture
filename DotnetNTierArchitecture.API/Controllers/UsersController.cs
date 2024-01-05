@@ -8,8 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace DotnetNTierArchitecture.API.Controllers
 {
-    [Route("api/[controller]")]
-    [ApiController]
     public class UsersController : CustomBasesController
     {
         private readonly IMapper _mapper;
