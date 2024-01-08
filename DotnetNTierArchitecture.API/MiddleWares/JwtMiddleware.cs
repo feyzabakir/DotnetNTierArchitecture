@@ -1,8 +1,8 @@
 ﻿using DotnetNTierArchitecture.Core.Services;
 using DotnetNTierArchitecture.Service.Authorization.Abstraction;
 
-namespace DotnetNTierArchitecture.API.MiddleWares
-{
+namespace DotnetNTierArchitecture.API.MiddleWares;
+
     public class JwtMiddleware
     {
         private readonly RequestDelegate _next;
@@ -36,4 +36,5 @@ namespace DotnetNTierArchitecture.API.MiddleWares
             await _next(context);
         }
     }
-}
+
+

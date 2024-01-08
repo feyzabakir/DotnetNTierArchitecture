@@ -61,7 +61,7 @@ builder.Services.AddHttpContextAccessor();
 builder.Services.AddScoped<IJwtAuthenticationManager, JwtAuthenticationManager>();
 
 // JWT Kutuphanesi
-builder.Services.AddControllers().AddFluentValidation(x => { x.RegisterValidatorsFromAssemblyContaining<TeamDtoValidator>(); });
+builder.Services.AddControllers().AddFluentValidation(x => { x.RegisterValidatorsFromAssemblyContaining<TeamDtoValidator>();});
 
 //AppDbContext islemleri
 builder.Services.AddDbContext<AppDbContext>(x =>
